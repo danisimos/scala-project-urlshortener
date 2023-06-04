@@ -31,9 +31,9 @@ dependencyOverrides += "io.circe" %% "circe-core" % "0.14.3"
 scalacOptions ++= Seq("-Ymacro-annotations")
 
 enablePlugins(UniversalPlugin)
-enablePlugins(DockerPlugin)
+
 enablePlugins(JavaAppPackaging)
 
-dockerExposedPorts ++= Seq(8080)
-dockerBaseImage := "openjdk:17-jdk-slim"
+
+mainClass := Some("Main")
 

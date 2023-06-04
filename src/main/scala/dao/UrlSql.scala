@@ -67,7 +67,7 @@ object UrlSql {
           val newurl = CreateUrl(url.originalUrl, ShortUrl(s"http://localhost:8080/$short"), url.expiredAt, url.reachable)
           insertSql(newurl)
             .withUniqueGeneratedKeys[UrlId]("id")
-            .map(id => Url(id, newurl.originalUrl, ShortUrl(short), newurl.expiredAt))
+            .map(id => Url(id, newurl.originalUrl, ShortUrl(short), newurl.expiredAt, newurl.reachable))
       }
     }
 

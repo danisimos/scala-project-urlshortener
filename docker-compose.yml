@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   urlshortener:
-    image: docker.io/library/wk:0.1.0-SNAPSHOT
+    build: ./
+    image: urlshortener:latest
     environment:
       DB_URL: 51.250.8.27
       DB_USER: urlshortener
