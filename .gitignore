@@ -1,0 +1,17 @@
+target
+*.iml
+/.idea
+/tmp
+/result*.xml
+/*.epoch
+/*.log*
+/docker.tag
+.bloop
+**/*.bsp/
+*.DS_Store
+metals.*
+settings.json
+.history/**/*
+.metals/**/*
+.bsp/**/*
+.vscode/**/*

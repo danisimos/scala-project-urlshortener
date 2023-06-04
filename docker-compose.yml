@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  urlshortener:
+    image: docker.io/library/wk:0.1.0-SNAPSHOT
+    environment:
+      DB_URL: 51.250.8.27
+      DB_USER: urlshortener
+      DB_PASS: urlshortener
+      DB_NAME: urlshortener
+    ports:
+      - "8080:8080"
