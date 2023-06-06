@@ -62,7 +62,6 @@ object UrlStorage {
       val createUrl: CreateUrl = CreateUrl(
         url,
         ShortUrl(""),
-        ExpiredAt(Instant.now().plusSeconds(259200)),
         ReachableUrl(reachableUrl)
       )
       sql

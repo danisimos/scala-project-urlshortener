@@ -28,8 +28,7 @@ object UrlSql {
       sql"delete from urls where id=${id.value}".update
 
     def insertSql(url: CreateUrl): Update0 =
-      sql"insert into urls (original_url, short_url, expired_at) values (${url.originalUrl.value}, ${url.shortUrl.value}, ${url.expiredAt.value
-          .toEpochMilli()})".update
+      sql"insert into urls (original_url, short_url, reachable) values (${url.originalUrl.value}, ${url.shortUrl.value}, ${url.reachable.value})".update
 
     def findByShortUrl(shortUrl: ShortUrl) =
       sql"select * from urls where short_url=${shortUrl.value}"
@@ -64,10 +63,10 @@ object UrlSql {
       getCountSql().option.flatMap {
         case i: Option[Int] if i.nonEmpty =>
           val short = new Base62().encode(i.get)
-          val newurl = CreateUrl(url.originalUrl, ShortUrl(s"http://localhost:8080/$short"), url.expiredAt, url.reachable)
+          val newurl = CreateUrl(url.originalUrl, ShortUrl(short), url.reachable)
           insertSql(newurl)
             .withUniqueGeneratedKeys[UrlId]("id")
-            .map(id => Url(id, newurl.originalUrl, ShortUrl(short), newurl.expiredAt, newurl.reachable))
+            .map(id => Url(id, newurl.originalUrl, ShortUrl(s"http://localhost:8080/$short"), newurl.reachable))
       }
     }
 
@@ -76,7 +75,7 @@ object UrlSql {
     }
 
     override def getOriginalByShort(short: ShortUrl): doobie.ConnectionIO[Option[Url]] =
-      findByShortUrl(short).option
+      findByShortUrl(short).map(url => Url(url.id, url.originalUrl, ShortUrl(s"http://localhost:8080/${url.shortUrl.value}"), url.reachable)).option
   }
 
   def make: UrlSql = new Impl

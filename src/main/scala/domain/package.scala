@@ -45,22 +45,13 @@ package object domain {
 
   @derive(loggable, encoder, decoder)
   @newtype
-  case class ExpiredAt(value: Instant)
-  object ExpiredAt {
-    implicit val doobieRead: Read[ExpiredAt] =
-      Read[Long].map(ts => ExpiredAt(Instant.ofEpochMilli(ts)))
-    implicit val schema: Schema[ExpiredAt] = Schema.schemaForString.map(n =>
-      Some(ExpiredAt(Instant.parse(n)))
-    )(_.value.toString)
-  }
-
-  @derive(loggable, encoder, decoder)
-  @newtype
   case class ReachableUrl(value: Boolean)
   object ReachableUrl {
     implicit val doobieRead: Read[ReachableUrl] = Read[Boolean].map(ReachableUrl(_))
     implicit val schema: Schema[ReachableUrl] =
       Schema.schemaForBoolean.map(n => Some(ReachableUrl(n)))(_.value)
+    implicit val codec: Codec[String, ReachableUrl, TextPlain] =
+      Codec.boolean.map(ReachableUrl(_))(_.value)
   }
 
   type IOWithRequestContext[A] = ReaderT[IO, RequestContext, A]
